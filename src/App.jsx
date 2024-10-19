@@ -10,17 +10,25 @@ const INITIAL_TODOS = [
 ]
 
 function App() {
+
   const [todos, setTodos] = useState(INITIAL_TODOS);
 
-  let checked = todos.filter(td => td.finished === true);
+  let completed = todos.filter(td => td.finished !== false)
 
-  function handleAddTodo(newTodo) {
-    setTodos(todos.concat([{
-      id: currentId++,
-      task: newTodo,
-      finished: false,
-    }]))
-  }
+  function handleAddTodo(task) {
+    setTodos([
+      ...todos,
+      {
+        id: currentId++,
+        task: task,
+        finished: false,
+      }
+    ]);
+  };
+
+  function handleDeleteTodo(todoId) {
+    setTodos(todos.filter(td => td.id !== todoId));
+  };
 
   function handleToggleTodo(todoId) {
     setTodos(todos.map(todo => {
@@ -30,32 +38,30 @@ function App() {
           finished: !todo.finished,
         }
       }
-      else
+      else {
         return todo;
-    }))
-  }
-
-  function handleDeleteTodo(todoId) {
-    setTodos(todos.filter(td => td.id !== todoId));
-  }
-
-  function handleEditTodo(nextTodo) { 
-    setTodos(todos.map(todo => {
-      if (todo.id === nextTodo.id) {
-        return nextTodo;
       }
-      else
-        return todo;
-    }))
-  }
+    }));
+  };
 
+  function handleEditTodo(nextTodo) {
+    setTodos(todos.map(todo => {
+      if (todo.id === nextTodo.id) 
+        return nextTodo;
+      else 
+        return todo;
+    }));
+  };
+  
   return (
     <div>
-      <AddTodo handleAddTodo={handleAddTodo} />
-      <ListTodos todos={todos} onToggle={handleToggleTodo} onClickDelete={handleDeleteTodo} handleEditTodo={handleEditTodo} />
-      <p>You currently have {checked.length} tasks of {todos.length} completed!</p>
+      <AddTodo onClick={handleAddTodo} />
+      <ListTodos todos={todos} handleDeleteTodo={handleDeleteTodo} handleToggleTodo={handleToggleTodo} handleEditTodo={handleEditTodo} />
+      <p>{completed.length} todos of {todos.length} completed!</p>
     </div>
   )
 }
+
+
 
 export default App

@@ -1,21 +1,23 @@
 import { useState } from 'react';
 
-export default function AddTodo({ handleAddTodo }) {
-  const [task, setTask] = useState('')
+export default function AddTodo({ onClick }) {
+  const [task, setTask] = useState('');
 
   return (
-    <div>
-      <input 
-        type='text'
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-      />
+    <>
+      <label>
+        <input
+          type='task'
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+      </label>
       <button onClick={() => {
-        handleAddTodo(task)
-        setTask('');
+        onClick(task)
+        setTask('')
       }}>
         Add Todo
       </button>
-    </div>
+    </>
   )
 }
