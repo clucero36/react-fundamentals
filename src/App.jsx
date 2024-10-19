@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import AddTodo from './components/AddToDo'
 import ListTodos from './components/ListTodos'
@@ -13,20 +11,15 @@ const INITIAL_TODOS = [
 
 function App() {
   const [todos, setTodos] = useState(INITIAL_TODOS);
-  const [task, setTask] = useState('');
 
   let checked = todos.filter(td => td.finished === true);
 
-  function handleAddTodo() {
+  function handleAddTodo(newTodo) {
     setTodos(todos.concat([{
       id: currentId++,
-      task: task,
+      task: newTodo,
       finished: false,
     }]))
-  }
-
-  function handleChange(e) {
-    setTask(e.target.value);
   }
 
   function handleToggleTodo(todoId) {
@@ -46,10 +39,20 @@ function App() {
     setTodos(todos.filter(td => td.id !== todoId));
   }
 
+  function handleEditTodo(nextTodo) { 
+    setTodos(todos.map(todo => {
+      if (todo.id === nextTodo.id) {
+        return nextTodo;
+      }
+      else
+        return todo;
+    }))
+  }
+
   return (
     <div>
-      <AddTodo task={task} handleChange={handleChange} handleAddTodo={handleAddTodo} />
-      <ListTodos todos={todos} handleToggleTodo={handleToggleTodo} handleDeleteTodo={handleDeleteTodo} />
+      <AddTodo handleAddTodo={handleAddTodo} />
+      <ListTodos todos={todos} onToggle={handleToggleTodo} onClickDelete={handleDeleteTodo} handleEditTodo={handleEditTodo} />
       <p>You currently have {checked.length} tasks of {todos.length} completed!</p>
     </div>
   )
